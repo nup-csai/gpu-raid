@@ -19,6 +19,10 @@ Another problem that surfaced was that total execution time of the program was g
 
 1. I need to confirm whether it was lack of VRAM that was causing the driver failure. 
 2. After I confirm this, I want to determine more precisely how much memory I can use without causing errors.
-3. I will use OpenCL profiling tools to determine, why my program executes slower than the simple one. 
+3. I will use OpenCL profiling tools to determine, why my program executes slower than the simple one.
+
+# Week 2
+
+### [Presentation link](https://docs.google.com/presentation/d/1yaa_cGK-k3zo7yhEbvAk6yWemQ75FB533Ybfw3aF9FA/edit?usp=sharing)
 
 
