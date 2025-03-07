@@ -23,6 +23,6 @@ Another problem that surfaced was that total execution time of the program was g
 
 # Week 2
 
-### [Presentation link](https://docs.google.com/presentation/d/1GTR8MzVgnDTteIbLkc-Kf8LvC3cqzs0A/edit?usp=sharing&ouid=116062802463341635232&rtpof=true&sd=true)
+### [Presentation link](https://docs.google.com/presentation/d/1yaa_cGK-k3zo7yhEbvAk6yWemQ75FB533Ybfw3aF9FA/edit?usp=sharing)
 
 
