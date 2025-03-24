@@ -1,0 +1,410 @@
+Starting /usr/sbin/ocs-sr at 2025-03-20 03:33:31 UTC...
+*****************************************************.
+Clonezilla image dir: /home/partimag
+Shutting down the Logical Volume Manager
+Finished Shutting down the Logical Volume Manager
+Found /home/partimag is using FAT file system. Set VOL_LIMIT_IN_INTERACTIVE to 4096 MB.
+The selected devices: nvme0n1
+PS. Next time you can run this command directly:
+/usr/sbin/ocs-sr -q2 -c -j2 -z9p -i 4096 -sfsck -senc -plu -p poweroff savedisk 2025-03-20-03-img nvme0n1
+*****************************************************.
+The selected devices: nvme0n1
+Searching for data/swap/extended partition(s)...
+The data partition to be saved: nvme0n1p1 nvme0n1p2 nvme0n1p3 nvme0n1p4 nvme0n1p6 nvme0n1p7 nvme0n1p8 nvme0n1p9 nvme0n1p10 nvme0n1p11
+The swap partition to be saved: nvme0n1p5
+The selected devices: nvme0n1p1 nvme0n1p2 nvme0n1p3 nvme0n1p4 nvme0n1p6 nvme0n1p7 nvme0n1p8 nvme0n1p9 nvme0n1p10 nvme0n1p11
+The following step is to save the hard disk/partition(s) on this machine as an image:
+*****************************************************.
+Machine: NMH-WCX9
+nvme0n1 (512GB|SSSTC_CL1-8D512_|pci-0000_02_00_0-nvme-1||0021104008M2)
+nvme0n1p1 (200M|vfat|SYSTEM(In_SSSTC_CL1-8D512_)|pci-0000_02_00_0-nvme-1|0021104008M2)
+nvme0n1p2 (16M|MS_Reserved_Partition(In_SSSTC_CL1-8D512_)|pci-0000_02_00_0-nvme-1|0021104008M2)
+nvme0n1p3 (120G|ntfs|Windows(In_SSSTC_CL1-8D512_)|pci-0000_02_00_0-nvme-1|0021104008M2)
+nvme0n1p4 (221.2G|ntfs|Data(In_SSSTC_CL1-8D512_)|pci-0000_02_00_0-nvme-1|0021104008M2)
+nvme0n1p6 (954M|ext4(In_SSSTC_CL1-8D512_)|pci-0000_02_00_0-nvme-1|0021104008M2)
+nvme0n1p7 (286M|vfat(In_SSSTC_CL1-8D512_)|pci-0000_02_00_0-nvme-1|0021104008M2)
+nvme0n1p8 (108.5G|ext4(In_SSSTC_CL1-8D512_)|pci-0000_02_00_0-nvme-1|0021104008M2)
+nvme0n1p9 (512M|vfat|WINPE(In_SSSTC_CL1-8D512_)|pci-0000_02_00_0-nvme-1|0021104008M2)
+nvme0n1p10 (14G|ntfs|Onekey(In_SSSTC_CL1-8D512_)|pci-0000_02_00_0-nvme-1|0021104008M2)
+nvme0n1p11 (1G|ntfs|WinRE(In_SSSTC_CL1-8D512_)|pci-0000_02_00_0-nvme-1|0021104008M2)
+*****************************************************.
+-> "/home/partimag/2025-03-20-03-img".
+Shutting down the Logical Volume Manager
+Finished Shutting down the Logical Volume Manager
+Starting saving /dev/nvme0n1p1 as /home/partimag/2025-03-20-03-img/nvme0n1p1.XXX...
+/dev/nvme0n1p1 filesystem: vfat.
+*****************************************************.
+*****************************************************.
+Use partclone with zstd to save the image.
+Image file will be split with size limit 4096 MB.
+*****************************************************.
+If this action fails or hangs, check:
+* Is the disk full ?
+*****************************************************.
+Running: partclone.vfat -z 10485760 -N  -L /var/log/clonezilla//partclone.log -c -s /dev/nvme0n1p1 --output - | zstd -c -T0 -3 | split -a 2 -b 4096MB - /home/partimag/2025-03-20-03-img/nvme0n1p1.vfat-ptcl-img.zst. 2> /tmp/img_out_err.3EqPh8
+Opening User Interface mode.
+Partclone v0.3.33 http://partclone.org
+Starting to clone device (/dev/nvme0n1p1) to image (-)
+Reading Super Block
+memory needed: 21022724 bytes
+bitmap 51200 bytes, blocks 2*10485760 bytes, checksum 4 bytes
+Calculating bitmap... Please wait... 
+Total Time: 00:00:01, Ave. Rate:  60.00byte/min, 100.00% completed!
+done!
+File system:  FAT32
+Device size:  209.7 MB = 409600 Blocks
+Space in use:  89.7 MB = 175124 Blocks
+Free Space:   120.1 MB = 234476 Blocks
+Block size:   512 Byte
+Total block 409600
+Total Time: 00:00:02, Ave. Rate:   2.69GB/min, 100.00% completed!
+Syncing... OK!
+Partclone successfully cloned the device (/dev/nvme0n1p1) to the image (-)
+>>> Time elapsed: 7.34 secs (~ .122 mins)
+*****************************************************.
+Finished saving /dev/nvme0n1p1 as /home/partimag/2025-03-20-03-img/nvme0n1p1.vfat-ptcl-img.zst
+*****************************************************.
+Starting saving /dev/nvme0n1p2 as /home/partimag/2025-03-20-03-img/nvme0n1p2.XXX...
+/dev/nvme0n1p2 filesystem: MS_Reserved_Partition.
+*****************************************************.
+*****************************************************.
+Use partclone with zstd to save the image.
+Image file will be split with size limit 4096 MB.
+*****************************************************.
+If this action fails or hangs, check:
+* Is the disk full ?
+*****************************************************.
+Running: partclone.dd -z 10485760 -N  --buffer_size 16777216 -L /var/log/clonezilla//partclone.log -s /dev/nvme0n1p2 --output - | zstd -c -T0 -3 | split -a 2 -b 4096MB - /home/partimag/2025-03-20-03-img/nvme0n1p2.dd-ptcl-img.zst. 2> /tmp/img_out_err.GXeMzG
+Opening User Interface mode.
+Partclone v0.3.33 http://partclone.org
+Starting to clone/restore (/dev/nvme0n1p2) to (-) with dd mode
+get device size 16777216 by ioctl BLKGETSIZE64,
+get device size 16777216 by ioctl BLKGETSIZE64,
+memory needed: 33558528 bytes
+bitmap 4096 bytes, blocks 2*16777216 bytes, checksum 0 bytes
+Calculating bitmap... Please wait... done!
+File system:  raw
+Device size:   16.8 MB = 32768 Blocks
+Space in use:  16.8 MB = 32768 Blocks
+Free Space:     0 Byte = 0 Blocks
+Block size:   512 Byte
+Total block 32768
+Total Time: 00:00:02, Ave. Rate: 503.32MB/min, 100.00% completed!
+Syncing... OK!
+>>> Time elapsed: 6.22 secs (~ .103 mins)
+*****************************************************.
+Finished saving /dev/nvme0n1p2 as /home/partimag/2025-03-20-03-img/nvme0n1p2.dd-ptcl-img.zst
+*****************************************************.
+Starting saving /dev/nvme0n1p3 as /home/partimag/2025-03-20-03-img/nvme0n1p3.XXX...
+/dev/nvme0n1p3 filesystem: ntfs.
+*****************************************************.
+*****************************************************.
+Use partclone with zstd to save the image.
+Image file will be split with size limit 4096 MB.
+*****************************************************.
+If this action fails or hangs, check:
+* Is the disk full ?
+*****************************************************.
+Running: partclone.ntfs -z 10485760 -N  -L /var/log/clonezilla//partclone.log -c -s /dev/nvme0n1p3 --output - | zstd -c -T0 -3 | split -a 2 -b 4096MB - /home/partimag/2025-03-20-03-img/nvme0n1p3.ntfs-ptcl-img.zst. 2> /tmp/img_out_err.22lpm5
+Opening User Interface mode.
+Partclone v0.3.33 http://partclone.org
+Starting to clone device (/dev/nvme0n1p3) to image (-)
+Reading Super Block
+memory needed: 24903684 bytes
+bitmap 3932160 bytes, blocks 2*10485760 bytes, checksum 4 bytes
+Calculating bitmap... Please wait... 
+Total Time: 00:00:01, Ave. Rate:  60.00byte/min, 100.00% completed!
+done!
+File system:  NTFS
+Device size:  128.8 GB = 31457279 Blocks
+Space in use: 113.2 GB = 27642453 Blocks
+Free Space:    15.6 GB = 3814826 Blocks
+Block size:   4096 Byte
+Total block 31457279
+Total Time: 00:09:41, Ave. Rate:  11.69GB/min, 100.00% completed!
+Syncing... OK!
+Partclone successfully cloned the device (/dev/nvme0n1p3) to the image (-)
+>>> Time elapsed: 587.68 secs (~ 9.794 mins)
+*****************************************************.
+Finished saving /dev/nvme0n1p3 as /home/partimag/2025-03-20-03-img/nvme0n1p3.ntfs-ptcl-img.zst
+*****************************************************.
+Starting saving /dev/nvme0n1p4 as /home/partimag/2025-03-20-03-img/nvme0n1p4.XXX...
+/dev/nvme0n1p4 filesystem: ntfs.
+*****************************************************.
+*****************************************************.
+Use partclone with zstd to save the image.
+Image file will be split with size limit 4096 MB.
+*****************************************************.
+If this action fails or hangs, check:
+* Is the disk full ?
+*****************************************************.
+Running: partclone.ntfs -z 10485760 -N  -L /var/log/clonezilla//partclone.log -c -s /dev/nvme0n1p4 --output - | zstd -c -T0 -3 | split -a 2 -b 4096MB - /home/partimag/2025-03-20-03-img/nvme0n1p4.ntfs-ptcl-img.zst. 2> /tmp/img_out_err.y7YLMy
+Opening User Interface mode.
+Partclone v0.3.33 http://partclone.org
+Starting to clone device (/dev/nvme0n1p4) to image (-)
+Reading Super Block
+memory needed: 28220644 bytes
+bitmap 7249120 bytes, blocks 2*10485760 bytes, checksum 4 bytes
+Calculating bitmap... Please wait... 
+Total Time: 00:00:01, Ave. Rate:  60.00byte/min, 100.00% completed!
+done!
+File system:  NTFS
+Device size:  237.5 GB = 57992959 Blocks
+Space in use: 194.0 GB = 47373709 Blocks
+Free Space:    43.5 GB = 10619250 Blocks
+Block size:   4096 Byte
+Total block 57992959
+Total Time: 00:18:12, Ave. Rate:  10.66GB/min, 100.00% completed!
+Syncing... OK!
+Partclone successfully cloned the device (/dev/nvme0n1p4) to the image (-)
+>>> Time elapsed: 1099.65 secs (~ 18.327 mins)
+*****************************************************.
+Finished saving /dev/nvme0n1p4 as /home/partimag/2025-03-20-03-img/nvme0n1p4.ntfs-ptcl-img.zst
+*****************************************************.
+Starting saving /dev/nvme0n1p6 as /home/partimag/2025-03-20-03-img/nvme0n1p6.XXX...
+/dev/nvme0n1p6 filesystem: ext4.
+*****************************************************.
+*****************************************************.
+Use partclone with zstd to save the image.
+Image file will be split with size limit 4096 MB.
+*****************************************************.
+If this action fails or hangs, check:
+* Is the disk full ?
+*****************************************************.
+Running: partclone.ext4 -z 10485760 -N  -L /var/log/clonezilla//partclone.log -c -s /dev/nvme0n1p6 --output - | zstd -c -T0 -3 | split -a 2 -b 4096MB - /home/partimag/2025-03-20-03-img/nvme0n1p6.ext4-ptcl-img.zst. 2> /tmp/img_out_err.ELhFfr
+Opening User Interface mode.
+Partclone v0.3.33 http://partclone.org
+Starting to clone device (/dev/nvme0n1p6) to image (-)
+Reading Super Block
+memory needed: 21002052 bytes
+bitmap 30528 bytes, blocks 2*10485760 bytes, checksum 4 bytes
+Calculating bitmap... Please wait... 
+Total Time: 00:00:01, Ave. Rate:  60.00byte/min, 100.00% completed!
+done!
+File system:  EXTFS
+Device size:    1.0 GB = 244224 Blocks
+Space in use: 273.1 MB = 66673 Blocks
+Free Space:   727.2 MB = 177551 Blocks
+Block size:   4096 Byte
+Total block 244224
+Total Time: 00:00:02, Ave. Rate:   8.19GB/min, 100.00% completed!
+Syncing... OK!
+Partclone successfully cloned the device (/dev/nvme0n1p6) to the image (-)
+>>> Time elapsed: 7.27 secs (~ .121 mins)
+*****************************************************.
+Finished saving /dev/nvme0n1p6 as /home/partimag/2025-03-20-03-img/nvme0n1p6.ext4-ptcl-img.zst
+*****************************************************.
+Starting saving /dev/nvme0n1p7 as /home/partimag/2025-03-20-03-img/nvme0n1p7.XXX...
+/dev/nvme0n1p7 filesystem: vfat.
+*****************************************************.
+*****************************************************.
+Use partclone with zstd to save the image.
+Image file will be split with size limit 4096 MB.
+*****************************************************.
+If this action fails or hangs, check:
+* Is the disk full ?
+*****************************************************.
+Running: partclone.vfat -z 10485760 -N  -L /var/log/clonezilla//partclone.log -c -s /dev/nvme0n1p7 --output - | zstd -c -T0 -3 | split -a 2 -b 4096MB - /home/partimag/2025-03-20-03-img/nvme0n1p7.vfat-ptcl-img.zst. 2> /tmp/img_out_err.CU0SkU
+Opening User Interface mode.
+Partclone v0.3.33 http://partclone.org
+Starting to clone device (/dev/nvme0n1p7) to image (-)
+Reading Super Block
+memory needed: 21044740 bytes
+bitmap 73216 bytes, blocks 2*10485760 bytes, checksum 4 bytes
+Calculating bitmap... Please wait... 
+Total Time: 00:00:01, Ave. Rate:  60.00byte/min, 100.00% completed!
+done!
+File system:  FAT32
+Device size:  299.9 MB = 585728 Blocks
+Space in use:   7.0 MB = 13640 Blocks
+Free Space:   292.9 MB = 572088 Blocks
+Block size:   512 Byte
+Total block 585728
+Total Time: 00:00:02, Ave. Rate: 209.51MB/min, 100.00% completed!
+Syncing... OK!
+Partclone successfully cloned the device (/dev/nvme0n1p7) to the image (-)
+>>> Time elapsed: 7.14 secs (~ .119 mins)
+*****************************************************.
+Finished saving /dev/nvme0n1p7 as /home/partimag/2025-03-20-03-img/nvme0n1p7.vfat-ptcl-img.zst
+*****************************************************.
+Starting saving /dev/nvme0n1p8 as /home/partimag/2025-03-20-03-img/nvme0n1p8.XXX...
+/dev/nvme0n1p8 filesystem: ext4.
+*****************************************************.
+*****************************************************.
+Use partclone with zstd to save the image.
+Image file will be split with size limit 4096 MB.
+*****************************************************.
+If this action fails or hangs, check:
+* Is the disk full ?
+*****************************************************.
+Running: partclone.ext4 -z 10485760 -N  -L /var/log/clonezilla//partclone.log -c -s /dev/nvme0n1p8 --output - | zstd -c -T0 -3 | split -a 2 -b 4096MB - /home/partimag/2025-03-20-03-img/nvme0n1p8.ext4-ptcl-img.zst. 2> /tmp/img_out_err.3TzOyO
+Opening User Interface mode.
+Partclone v0.3.33 http://partclone.org
+Starting to clone device (/dev/nvme0n1p8) to image (-)
+Reading Super Block
+memory needed: 24528356 bytes
+bitmap 3556832 bytes, blocks 2*10485760 bytes, checksum 4 bytes
+Calculating bitmap... Please wait... 
+Total Time: 00:00:01, Ave. Rate:  60.00byte/min, 100.00% completed!
+done!
+File system:  EXTFS
+Device size:  116.6 GB = 28454656 Blocks
+Space in use:  61.4 GB = 14992073 Blocks
+Free Space:    55.1 GB = 13462583 Blocks
+Block size:   4096 Byte
+Total block 28454656
+Total Time: 00:05:10, Ave. Rate:  11.89GB/min, 100.00% completed!
+Syncing... OK!
+Partclone successfully cloned the device (/dev/nvme0n1p8) to the image (-)
+>>> Time elapsed: 317.37 secs (~ 5.289 mins)
+*****************************************************.
+Finished saving /dev/nvme0n1p8 as /home/partimag/2025-03-20-03-img/nvme0n1p8.ext4-ptcl-img.zst
+*****************************************************.
+Starting saving /dev/nvme0n1p9 as /home/partimag/2025-03-20-03-img/nvme0n1p9.XXX...
+/dev/nvme0n1p9 filesystem: vfat.
+*****************************************************.
+*****************************************************.
+Use partclone with zstd to save the image.
+Image file will be split with size limit 4096 MB.
+*****************************************************.
+If this action fails or hangs, check:
+* Is the disk full ?
+*****************************************************.
+Running: partclone.vfat -z 10485760 -N  -L /var/log/clonezilla//partclone.log -c -s /dev/nvme0n1p9 --output - | zstd -c -T0 -3 | split -a 2 -b 4096MB - /home/partimag/2025-03-20-03-img/nvme0n1p9.vfat-ptcl-img.zst. 2> /tmp/img_out_err.6x4H7c
+Opening User Interface mode.
+Partclone v0.3.33 http://partclone.org
+Starting to clone device (/dev/nvme0n1p9) to image (-)
+Reading Super Block
+memory needed: 21102596 bytes
+bitmap 131072 bytes, blocks 2*10485760 bytes, checksum 4 bytes
+Calculating bitmap... Please wait... 
+Total Time: 00:00:01, Ave. Rate:  60.00byte/min, 100.00% completed!
+done!
+File system:  FAT32
+Device size:  536.9 MB = 1048576 Blocks
+Space in use: 404.3 MB = 789616 Blocks
+Free Space:   132.6 MB = 258960 Blocks
+Block size:   512 Byte
+Total block 1048576
+Total Time: 00:00:06, Ave. Rate:   4.04GB/min, 100.00% completed!
+Syncing... OK!
+Partclone successfully cloned the device (/dev/nvme0n1p9) to the image (-)
+>>> Time elapsed: 11.25 secs (~ .187 mins)
+*****************************************************.
+Finished saving /dev/nvme0n1p9 as /home/partimag/2025-03-20-03-img/nvme0n1p9.vfat-ptcl-img.zst
+*****************************************************.
+Starting saving /dev/nvme0n1p10 as /home/partimag/2025-03-20-03-img/nvme0n1p10.XXX...
+/dev/nvme0n1p10 filesystem: ntfs.
+*****************************************************.
+*****************************************************.
+Use partclone with zstd to save the image.
+Image file will be split with size limit 4096 MB.
+*****************************************************.
+If this action fails or hangs, check:
+* Is the disk full ?
+*****************************************************.
+Running: partclone.ntfs -z 10485760 -N  -L /var/log/clonezilla//partclone.log -c -s /dev/nvme0n1p10 --output - | zstd -c -T0 -3 | split -a 2 -b 4096MB - /home/partimag/2025-03-20-03-img/nvme0n1p10.ntfs-ptcl-img.zst. 2> /tmp/img_out_err.jXDtrY
+Opening User Interface mode.
+Partclone v0.3.33 http://partclone.org
+Starting to clone device (/dev/nvme0n1p10) to image (-)
+Reading Super Block
+memory needed: 21430276 bytes
+bitmap 458752 bytes, blocks 2*10485760 bytes, checksum 4 bytes
+Calculating bitmap... Please wait... 
+Total Time: 00:00:01, Ave. Rate:  60.00byte/min, 100.00% completed!
+done!
+File system:  NTFS
+Device size:   15.0 GB = 3670015 Blocks
+Space in use:  12.7 GB = 3090990 Blocks
+Free Space:     2.4 GB = 579025 Blocks
+Block size:   4096 Byte
+Total block 3670015
+Total Time: 00:02:28, Ave. Rate:   5.13GB/min, 100.00% completed!
+Syncing... OK!
+Partclone successfully cloned the device (/dev/nvme0n1p10) to the image (-)
+>>> Time elapsed: 153.72 secs (~ 2.562 mins)
+*****************************************************.
+Finished saving /dev/nvme0n1p10 as /home/partimag/2025-03-20-03-img/nvme0n1p10.ntfs-ptcl-img.zst
+*****************************************************.
+Starting saving /dev/nvme0n1p11 as /home/partimag/2025-03-20-03-img/nvme0n1p11.XXX...
+/dev/nvme0n1p11 filesystem: ntfs.
+*****************************************************.
+*****************************************************.
+Use partclone with zstd to save the image.
+Image file will be split with size limit 4096 MB.
+*****************************************************.
+If this action fails or hangs, check:
+* Is the disk full ?
+*****************************************************.
+Running: partclone.ntfs -z 10485760 -N  -L /var/log/clonezilla//partclone.log -c -s /dev/nvme0n1p11 --output - | zstd -c -T0 -3 | split -a 2 -b 4096MB - /home/partimag/2025-03-20-03-img/nvme0n1p11.ntfs-ptcl-img.zst. 2> /tmp/img_out_err.6hex9Z
+Opening User Interface mode.
+Partclone v0.3.33 http://partclone.org
+Starting to clone device (/dev/nvme0n1p11) to image (-)
+Reading Super Block
+memory needed: 21004292 bytes
+bitmap 32768 bytes, blocks 2*10485760 bytes, checksum 4 bytes
+Calculating bitmap... Please wait... 
+Total Time: 00:00:01, Ave. Rate:  60.00byte/min, 100.00% completed!
+done!
+File system:  NTFS
+Device size:    1.1 GB = 262143 Blocks
+Space in use: 732.9 MB = 178923 Blocks
+Free Space:   340.9 MB = 83220 Blocks
+Block size:   4096 Byte
+Total block 262143
+Total Time: 00:00:04, Ave. Rate:  10.99GB/min, 100.00% completed!
+Syncing... OK!
+Partclone successfully cloned the device (/dev/nvme0n1p11) to the image (-)
+>>> Time elapsed: 9.13 secs (~ .152 mins)
+*****************************************************.
+Finished saving /dev/nvme0n1p11 as /home/partimag/2025-03-20-03-img/nvme0n1p11.ntfs-ptcl-img.zst
+*****************************************************.
+Saving block devices info in /home/partimag/2025-03-20-03-img/blkdev.list...
+Saving block devices attributes in /home/partimag/2025-03-20-03-img/blkid.list...
+Checking the integrity of partition table in the disk /dev/nvme0n1... 
+Reading the partition table for /dev/nvme0n1...RETVAL=0
+*****************************************************.
+Saving the primary GPT of nvme0n1 as /home/partimag/2025-03-20-03-img/nvme0n1-gpt-1st by dd...
+34+0 records in
+34+0 records out
+17408 bytes (17 kB, 17 KiB) copied, 0.000117201 s, 149 MB/s
+*****************************************************.
+Saving the secondary GPT of nvme0n1 as /home/partimag/2025-03-20-03-img/nvme0n1-gpt-2nd by dd...
+32+0 records in
+32+0 records out
+16384 bytes (16 kB, 16 KiB) copied, 0.00169927 s, 9.6 MB/s
+*****************************************************.
+Saving the GPT of nvme0n1 as /home/partimag/2025-03-20-03-img/nvme0n1-gpt.gdisk by gdisk...
+The operation has completed successfully.
+*****************************************************.
+Saving the MBR data for nvme0n1...
+1+0 records in
+1+0 records out
+512 bytes copied, 0.000239801 s, 2.1 MB/s
+End of saveparts job for image /home/partimag/2025-03-20-03-img.
+*****************************************************.
+Saving swap partition nvme0n1p5 info in /home/partimag/2025-03-20-03-img/swappt-nvme0n1p5.info if it exists...
+*****************************************************.
+End of savedisk job for image 2025-03-20-03-img.
+Checking if udevd rules have to be restored...
+This program is not started by Clonezilla server, so skip notifying it the job is done.
+This program is not started by Clonezilla server, so skip notifying it the job is done.
+Finished!
+Finished!
+*****************************************************.
+Partition table type: gpt
+The partition table file for this disk was found: nvme0n1, /home/partimag/2025-03-20-03-img/nvme0n1-pt.sf
+[1;33mThe image of this partition is restorable: nvme0n1p1
+[0;39mImage was saved by dd or partclone.dd. No need or no way to check the file system integrity: nvme0n1p2
+[1;33mThe image of this partition is restorable: nvme0n1p2
+[0;39m[1;33mThe image of this partition is restorable: nvme0n1p3
+[0;39m[1;33mThe image of this partition is restorable: nvme0n1p4
+[0;39m[1;33mThe image of this partition is restorable: nvme0n1p6
+[0;39m[1;33mThe image of this partition is restorable: nvme0n1p7
+[0;39m[1;33mThe image of this partition is restorable: nvme0n1p8
+[0;39m[1;33mThe image of this partition is restorable: nvme0n1p9
+[0;39m[1;33mThe image of this partition is restorable: nvme0n1p10
+[0;39m[1;33mThe image of this partition is restorable: nvme0n1p11
+[0;39m[1;33mAll the images of partition or LV devices in this image were checked and they are restorable: 2025-03-20-03-img
+[0;39mRunning: ocs-put-log-usb 2025-03-20-03-img
+Start copying Clonezilla related log files to Clonezilla live USB device...
