@@ -1,3 +1,4 @@
+#define CL_TARGET_OPENCL_VERSION 300
 #define _GNU_SOURCE
 #include <CL/cl.h>
 #include <stdio.h>
@@ -9,9 +10,9 @@
 #include <string.h>
 #include <errno.h>
 
-#define BLOCK_SIZE   (4 * 1024 * 1024)  // 4 MiB
-#define ALIGNMENT    4096               // ≥ page size
-#define VECTOR_WIDTH 16                 // uchar16 in kernel
+#define BLOCK_SIZE   (4 * 1024 * 1024)
+#define ALIGNMENT    4096             
+#define VECTOR_WIDTH 16               
 #define LOCAL_WS     256
 
 #define CHECK_CL_ERR(err, msg) \
@@ -33,7 +34,7 @@ const char *kernel_src =
         "    c[gid] = a[gid] ^ b[gid];\n"
         "}\n";
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv) {	
     if (argc != 4) {
         fprintf(stderr, "Usage: %s <in1> <in2> <out>\n", argv[0]);
         return EXIT_FAILURE;
@@ -42,15 +43,13 @@ int main(int argc, char **argv) {
     const char *in2_path = argv[2];
     const char *out_path = argv[3];
 
-    // --- open devices with O_DIRECT ---
     int fd1 = open(in1_path, O_RDONLY | O_DIRECT);
     if (fd1 < 0) perror_exit("open in1");
     int fd2 = open(in2_path, O_RDONLY | O_DIRECT);
     if (fd2 < 0) perror_exit("open in2");
     int fd3 = open(out_path, O_RDWR   | O_DIRECT | O_CREAT, 0644);
     if (fd3 < 0) perror_exit("open out");
-
-    // --- allocate aligned host buffers ---
+    
     uint8_t *h_buf1, *h_buf2, *h_out;
     if (posix_memalign((void**)&h_buf1, ALIGNMENT, BLOCK_SIZE) ||
         posix_memalign((void**)&h_buf2, ALIGNMENT, BLOCK_SIZE) ||
@@ -59,7 +58,6 @@ int main(int argc, char **argv) {
         return EXIT_FAILURE;
     }
 
-    // --- set up OpenCL ---
     cl_int err;
     cl_uint num_platforms = 0;
     CHECK_CL_ERR(clGetPlatformIDs(0, NULL, &num_platforms), "clGetPlatformIDs");
@@ -70,28 +68,31 @@ int main(int argc, char **argv) {
     cl_platform_id *platforms = malloc(sizeof(*platforms) * num_platforms);
     CHECK_CL_ERR(clGetPlatformIDs(num_platforms, platforms, NULL), "clGetPlatformIDs");
 
-    // pick first platform
     cl_platform_id platform = platforms[0];
     free(platforms);
 
-    // pick GPU device
     cl_device_id device;
-    CHECK_CL_ERR(clGetDeviceIDs(platform, CL_DEVICE_TYPE_GPU, 1, &device, NULL),
-                 "clGetDeviceIDs");
+    CHECK_CL_ERR(clGetDeviceIDs(platform, CL_DEVICE_TYPE_GPU, 2, &device, NULL), "clGetDeviceIDs");
+    //cl_device_id device = devices[1];
 
-    // context & command queue
+    //char device_name[128];
+    //err = clGetDeviceInfo(device, CL_DEVICE_NAME, sizeof(device_name), device_name, NULL);
+    //if (err != CL_SUCCESS) {
+    //    printf("Error: Failed to get device info!\n");
+    //    return -1;
+    //}
+    //printf("%s\n", device_name);
+
+
     cl_context ctx = clCreateContext(NULL, 1, &device, NULL, NULL, &err);
     CHECK_CL_ERR(err, "clCreateContext");
-    cl_command_queue queue = clCreateCommandQueue(ctx, device,
-                                                  CL_QUEUE_PROFILING_ENABLE, &err);
+    cl_command_queue queue = clCreateCommandQueueWithProperties(ctx, device, NULL, &err);
     CHECK_CL_ERR(err, "clCreateCommandQueue");
 
-    // build program
     cl_program prog = clCreateProgramWithSource(ctx, 1, &kernel_src, NULL, &err);
     CHECK_CL_ERR(err, "clCreateProgramWithSource");
     err = clBuildProgram(prog, 1, &device, "-cl-fast-relaxed-math", NULL, NULL);
     if (err != CL_SUCCESS) {
-        // print build log
         size_t log_size;
         clGetProgramBuildInfo(prog, device, CL_PROGRAM_BUILD_LOG, 0, NULL, &log_size);
         char *log = malloc(log_size + 1);
@@ -102,12 +103,10 @@ int main(int argc, char **argv) {
         CHECK_CL_ERR(err, "clBuildProgram");
     }
 
-    // kernel
     cl_kernel kernel = clCreateKernel(prog, "xor_kernel", &err);
     CHECK_CL_ERR(err, "clCreateKernel");
 
-    // device buffers
-    size_t vector_count = BLOCK_SIZE / VECTOR_WIDTH;
+    //size_t vector_count = BLOCK_SIZE / VECTOR_WIDTH;
     cl_mem bufA = clCreateBuffer(ctx, CL_MEM_READ_ONLY,
                                  BLOCK_SIZE, NULL, &err);
     CHECK_CL_ERR(err, "clCreateBuffer A");
@@ -118,18 +117,15 @@ int main(int argc, char **argv) {
                                  BLOCK_SIZE, NULL, &err);
     CHECK_CL_ERR(err, "clCreateBuffer C");
 
-    // set kernel args
     CHECK_CL_ERR(clSetKernelArg(kernel, 0, sizeof(bufA), &bufA), "clSetKernelArg 0");
     CHECK_CL_ERR(clSetKernelArg(kernel, 1, sizeof(bufB), &bufB), "clSetKernelArg 1");
     CHECK_CL_ERR(clSetKernelArg(kernel, 2, sizeof(bufC), &bufC), "clSetKernelArg 2");
 
-    // timing
     struct timespec t0, t1;
     clock_gettime(CLOCK_MONOTONIC_RAW, &t0);
-
+	
     off_t total = 0;
     while (1) {
-        // read from inputs
         ssize_t r1 = read(fd1, h_buf1, BLOCK_SIZE);
         if (r1 <= 0) break;
         ssize_t r2 = read(fd2, h_buf2, r1);
@@ -139,10 +135,8 @@ int main(int argc, char **argv) {
         }
 
         size_t bytes = (size_t)r1;
-        // must be multiple of VECTOR_WIDTH
         size_t vecs = bytes / VECTOR_WIDTH;
 
-        // enqueue host→device copies
         cl_event evtA, evtB;
         CHECK_CL_ERR(clEnqueueWriteBuffer(queue, bufA, CL_FALSE, 0,
                                           vecs * VECTOR_WIDTH, h_buf1,
@@ -153,7 +147,6 @@ int main(int argc, char **argv) {
                                           0, NULL, &evtB),
                      "clEnqueueWriteBuffer B");
 
-        // launch kernel
         size_t global_ws = ((vecs + LOCAL_WS - 1) / LOCAL_WS) * LOCAL_WS;
         cl_event evtK;
         CHECK_CL_ERR(clEnqueueNDRangeKernel(queue, kernel, 1, NULL,
@@ -162,13 +155,11 @@ int main(int argc, char **argv) {
                                             &evtK),
                      "clEnqueueNDRangeKernel");
 
-        // read back result
         CHECK_CL_ERR(clEnqueueReadBuffer(queue, bufC, CL_TRUE, 0,
                                          vecs * VECTOR_WIDTH, h_out,
                                          1, &evtK, NULL),
                      "clEnqueueReadBuffer C");
 
-        // write to output
         ssize_t w = write(fd3, h_out, bytes);
         if (w < 0) perror_exit("write out");
         total += w;
@@ -181,7 +172,6 @@ int main(int argc, char **argv) {
     printf("Processed %.2f GiB in %.3f s → %.2f GiB/s\n",
            gib, elapsed, gib/elapsed);
 
-    // cleanup
     close(fd1);
     close(fd2);
     close(fd3);
