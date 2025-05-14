@@ -72,7 +72,46 @@ int main(int argc, char **argv) {
     free(platforms);
 
     cl_device_id device;
-    CHECK_CL_ERR(clGetDeviceIDs(platform, CL_DEVICE_TYPE_GPU, 2, &device, NULL), "clGetDeviceIDs");
+
+    cl_uint num_devices = 0;
+    CHECK_CL_ERR(clGetDeviceIDs(platform, CL_DEVICE_TYPE_GPU,
+                                0, NULL, &num_devices),
+                 "clGetDeviceIDs (count)");
+    if (num_devices == 0) {
+        fprintf(stderr, "No GPU devices found\n");
+        exit(EXIT_FAILURE);
+    }
+
+    cl_device_id *devices = malloc(sizeof(*devices) * num_devices);
+    CHECK_CL_ERR(clGetDeviceIDs(platform, CL_DEVICE_TYPE_GPU,
+                                num_devices, devices, NULL),
+                 "clGetDeviceIDs (list)");
+
+    cl_device_id best_dev = devices[0];
+    cl_ulong best_mem = 0;
+    for (cl_uint i = 0; i < num_devices; i++) {
+        cl_ulong mem = 0;
+        clGetDeviceInfo(devices[i], CL_DEVICE_GLOBAL_MEM_SIZE,
+                        sizeof(mem), &mem, NULL);
+        if (mem > best_mem) {
+            best_mem = mem;
+            best_dev = devices[i];
+        }
+    }
+    free(devices);
+
+    // optional: print which device we ended up choosing
+    {
+        char name[128] = {0};
+        clGetDeviceInfo(best_dev, CL_DEVICE_NAME,
+                        sizeof(name), name, NULL);
+        printf("Using OpenCL device: %s (%.0f MiB VRAM)\n",
+               name, best_mem / (1024.0 * 1024.0));
+    }
+
+    // now use best_dev everywhere you previously used `device`
+    device = best_dev;
+
     //cl_device_id device = devices[1];
 
     //char device_name[128];
