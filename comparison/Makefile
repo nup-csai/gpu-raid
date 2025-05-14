@@ -1,6 +1,6 @@
 CC       := gcc
 CFLAGS   := -O3 -march=native -std=gnu11 -Wall -Wextra -pedantic
-LDFLAGS  := -lrt
+LDFLAGS  := -lrt -lOpenCL
 
 SRCDIR   := src
 BINDIR   := bin
