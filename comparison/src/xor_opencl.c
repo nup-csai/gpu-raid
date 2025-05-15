@@ -182,16 +182,9 @@ int main(int argc, char **argv) {
 
         size_t global_ws = ((vecs + LOCAL_WS - 1) / LOCAL_WS) * LOCAL_WS;
         cl_event evtK;
-        CHECK_CL_ERR(clEnqueueNDRangeKernel(queue, kernel, 1, NULL,
-                                            &global_ws, (size_t[]){LOCAL_WS},
-                                            2, (cl_event[]){evtA, evtB},
-                                            &evtK),
-                     "clEnqueueNDRangeKernel");
+        CHECK_CL_ERR(clEnqueueNDRangeKernel(queue, kernel, 1, NULL, &global_ws, (size_t[]){LOCAL_WS}, 2, (cl_event[]){evtA, evtB}, &evtK), "clEnqueueNDRangeKernel");
 
-        CHECK_CL_ERR(clEnqueueReadBuffer(queue, bufC, CL_TRUE, 0,
-                                         vecs * VECTOR_WIDTH, h_out,
-                                         1, &evtK, NULL),
-                     "clEnqueueReadBuffer C");
+        CHECK_CL_ERR(clEnqueueReadBuffer(queue, bufC, CL_TRUE, 0, vecs * VECTOR_WIDTH, h_out, 1, &evtK, NULL), "clEnqueueReadBuffer C");
 
         ssize_t w = write(fd3, h_out, bytes);
         if (w < 0) perror_exit("write out");
@@ -199,11 +192,9 @@ int main(int argc, char **argv) {
     }
 
     clock_gettime(CLOCK_MONOTONIC_RAW, &t1);
-    double elapsed = (t1.tv_sec - t0.tv_sec)
-                     + (t1.tv_nsec - t0.tv_nsec) / 1e9;
+    double elapsed = (t1.tv_sec - t0.tv_sec) + (t1.tv_nsec - t0.tv_nsec) / 1e9;
     double gib = (double)total / (1024.0*1024.0*1024.0);
-    printf("Processed %.2f GiB in %.3f s → %.2f GiB/s\n",
-           gib, elapsed, gib/elapsed);
+    printf("Processed %.2f GiB in %.3f s → %.2f GiB/s\n", gib, elapsed, gib/elapsed);
 
     close(fd1);
     close(fd2);

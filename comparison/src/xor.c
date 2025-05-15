@@ -46,7 +46,6 @@ int main(int argc, char *argv[]) {
         return EXIT_FAILURE;
     }
 
-    // Allocate aligned buffers
     uint8_t *buf1, *buf2;
     if (posix_memalign((void **)&buf1, ALIGNMENT, BLOCK_SIZE) != 0 ||
         posix_memalign((void **)&buf2, ALIGNMENT, BLOCK_SIZE) != 0) {
@@ -70,7 +69,6 @@ int main(int argc, char *argv[]) {
             break;
         }
         if (r1 == 0) {
-            // EOF on first input; assume second is same size
             break;
         }
 
@@ -83,10 +81,8 @@ int main(int argc, char *argv[]) {
             fprintf(stderr, "Warning: mismatched block sizes (%zd vs %zd)\n", r1, r2);
         }
 
-        // XOR into buf1
         xor_buffers(buf1, buf2, r1);
 
-        // Write result
         ssize_t w = write(fd3, buf1, r1);
         if (w < 0) {
             perror("write output");
@@ -103,11 +99,9 @@ int main(int argc, char *argv[]) {
     if (clock_gettime(CLOCK_MONOTONIC_RAW, &t_end) < 0) {
         perror("clock_gettime");
     } else {
-        double elapsed = (t_end.tv_sec - t_start.tv_sec)
-                         + (t_end.tv_nsec - t_start.tv_nsec) / 1e9;
+        double elapsed = (t_end.tv_sec - t_start.tv_sec) + (t_end.tv_nsec - t_start.tv_nsec) / 1e9;
         double gib = (double)total_bytes / (1024.0 * 1024.0 * 1024.0);
-        printf("Processed %.2f GiB in %.3f s => %.2f GiB/s\n",
-               gib, elapsed, gib / elapsed);
+        printf("Processed %.2f GiB in %.3f s => %.2f GiB/s\n", gib, elapsed, gib / elapsed);
     }
 
     free(buf1);
