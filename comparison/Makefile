@@ -1,14 +1,22 @@
-all: bin/xor_on_cpu bin/xor_on_gpu
+CC       := gcc
+CFLAGS   := -O3 -march=native -std=gnu11 -Wall -Wextra -pedantic
+LDFLAGS  := -lrt -lOpenCL
 
-bin/xor_on_cpu : src/xor_on_cpu.c
-	mkdir -p bin
-	gcc -g -Wall -Wextra $< -o $@ -lOpenCL
+SRCDIR   := src
+BINDIR   := bin
 
-bin/xor_on_gpu : src/xor_on_gpu.c
-	mkdir -p bin
-	gcc -g -Wall -Wextra $< -o $@ -lOpenCL
+SRCS   := $(wildcard $(SRCDIR)/*.c)
+PROGS  := $(patsubst $(SRCDIR)/%.c,$(BINDIR)/%,$(SRCS))
+
+.PHONY: all clean
+
+all: $(PROGS)
+
+$(BINDIR):
+	mkdir -p $(BINDIR)
+
+$(BINDIR)/%: $(SRCDIR)/%.c | $(BINDIR)
+	$(CC) $(CFLAGS) -o $@ $< $(LDFLAGS)
 
 clean:
-	rm -rf bin/*
-
-.PHONY: clean all
+	rm -rf $(BINDIR)

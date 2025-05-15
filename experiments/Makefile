@@ -1,12 +1,12 @@
-all: bin/main bin/checker
+all: bin experiments/bin
 
-bin/main : src/main.cpp
+bin/main : src
 	g++ -g -Wall -Wextra $< -o $@ -lOpenCL
 
-bin/checker : src/checker.cpp
+bin/checker : src
 	g++ -g -Wall -Wextra $< -o $@
 
-data_gen : src/gen.py
+data_gen : src
 	rm -rf data/*
 	python3 $<
 
