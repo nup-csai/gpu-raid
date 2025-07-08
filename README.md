@@ -35,3 +35,6 @@ Research project exploring RAID implementation on GPU using OpenCL.
 - OpenCL-capable GPU (tested on AMD)
 - Ubuntu Linux
 - Mesa drivers (version 23.2.1 recommended)
+
+## Presentation
+- Presentation could be found [here](https://docs.google.com/presentation/d/1yaa_cGK-k3zo7yhEbvAk6yWemQ75FB533Ybfw3aF9FA/edit?usp=sharing)
